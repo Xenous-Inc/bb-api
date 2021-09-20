@@ -43,7 +43,7 @@ const userSchema = new Schema({
     sensors: [
         {
             type: Schema.Types.ObjectId,
-            ref: REFS.sensors,
+            ref: REFS.sensor,
         },
     ],
 });
@@ -77,11 +77,11 @@ userSchema.statics.findByCredentials = async (email, password) => {
     try {
         const user = await User.findOne({ email });
         if (!user) {
-            throw new Error(ERROR_MESSAGES.invalidCredentials);
+            throw new Error(ERROR_MESSAGES.invalidUserCredentials);
         }
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
-            throw new Error(ERROR_MESSAGES.invalidCredentials);
+            throw new Error(ERROR_MESSAGES.invalidUserCredentials);
         }
         return user;
     } catch (error) {
