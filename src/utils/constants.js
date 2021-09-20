@@ -5,4 +5,4 @@ export const REFS = {
 
 export const ERROR_MESSAGES = {
     invalidCredentials: 'Invalid email or password',
-}
+};

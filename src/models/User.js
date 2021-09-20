@@ -89,6 +89,12 @@ userSchema.statics.findByCredentials = async (email, password) => {
     }
 };
 
+userSchema.set('timestamps', {
+    createdAt: true,
+
+    updatedAt: true,
+});
+
 const User = mongoose.model(REFS.user, userSchema);
 
 export default User;
