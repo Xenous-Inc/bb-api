@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { REFS } from '../utils/constants';
+import jwt from 'jsonwebtoken';
 
 const sensorSchema = new Schema({
     name: {
@@ -19,44 +20,35 @@ const sensorSchema = new Schema({
         type: String,
         required: true,
     },
-    token: {
-        type: String,
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: REFS.user,
         required: true,
     },
+    token: {
+        type: String,
+    },
     settings: {
-        type: {
-            requestFrequency: {
-                type: String,
-                enum: ['30m', '1h', '5h', '10h', '24h'],
-                default: '30m',
-            },
+        requestFrequency: {
+            type: String,
+            enum: ['30m', '1h', '5h', '10h', '24h'],
+            default: '30m',
         },
     },
     location: {
         type: {
-            type: {
-                type: String,
-                enum: ['Point'],
-                default: 'Point',
-            },
-            coordinates: {
-                type: [Number],
-                required: true,
-            },
+            type: String,
+            enum: ['Point'],
+            default: 'Point',
         },
-        required: true,
+        coordinates: {
+            type: [Number],
+        },
     },
     data: [
         {
-            type: {
-                type: String,
-                enum: ['PM2,5', 'PM10'],
-            },
-            value: { type: Number },
-            timestamp: {
-                type: Date,
-                default: Date.now,
-            },
+            type: Schema.Types.ObjectId,
+            ref: REFS.sensorData,
         },
     ],
 });
@@ -67,6 +59,18 @@ sensorSchema.set('timestamps', {
     updatedAt: true,
 });
 
-const Sensor = model(REFS.sensors, sensorSchema);
+sensorSchema.methods.generateAuthToken = async function () {
+    try {
+        const sensor = this;
+        const token = jwt.sign({ _id: sensor.id }, process.env.JWT_KEY);
+        sensor.token = token;
+        await sensor.save();
+        return token;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+const Sensor = model(REFS.sensor, sensorSchema);
 
 export default Sensor;
