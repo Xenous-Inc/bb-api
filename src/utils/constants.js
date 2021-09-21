@@ -1,7 +1,7 @@
 export const REFS = {
     user: 'User',
     sensor: 'Sensor',
-    sensorData: 'SensorData',
+    sensorValue: 'SensorValue',
 };
 
 export const ERROR_MESSAGES = {

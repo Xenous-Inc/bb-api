@@ -45,10 +45,10 @@ const sensorSchema = new Schema({
             type: [Number],
         },
     },
-    data: [
+    values: [
         {
             type: Schema.Types.ObjectId,
-            ref: REFS.sensorData,
+            ref: REFS.sensorValue,
         },
     ],
 });
