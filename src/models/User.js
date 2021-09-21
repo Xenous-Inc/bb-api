@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import { ERROR_MESSAGES, REFS } from '../utils/constants';
+import {secureSensorParams} from "../utils/security";
 
 const { Schema } = mongoose;
 
@@ -72,6 +73,19 @@ userSchema.methods.generateAuthToken = async function () {
         throw new Error(error);
     }
 };
+
+userSchema.statics.findOneByIdAndPopulateSensors = async (userId) => {
+   try {
+       if(!userId) throw new Error('userId=null');
+
+       const user = await User.findOne({ _id: userId }).populate('sensors');
+       user.sensors.forEach((v, i) => user.sensors[i] = secureSensorParams(v));
+
+       return user;
+   } catch (e) {
+        throw new Error(e);
+   }
+}
 
 userSchema.statics.findByCredentials = async (email, password) => {
     try {

@@ -22,7 +22,7 @@ app.use(boom());
 
 app.use('/user', userRouter);
 app.use('/user/auth', authRouter);
-app.use('/user/sensor', sensorRouter);
+app.use('/sensor', sensorRouter);
 app.get('/ping', (req, res) => {
     return res.status(200).json('pong');
 });

@@ -74,7 +74,6 @@ export const postValue = asyncHandler(async (req, res, next) => {
 
         return res.status(200).json({});
     } catch (e) {
-        console.log(e);
         return res.boom.internal('Unable to push new value to sensor');
     }
 });

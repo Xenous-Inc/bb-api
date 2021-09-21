@@ -1,5 +1,5 @@
 import express from 'express';
-import { signUp, signIn, logout, logoutAll } from '../controllers/user/auth';
+import { signUp, signIn, logout, logoutAll } from '../controllers/auth';
 import { authUser } from '../middlewares/auth';
 
 // eslint-disable-next-line new-cap

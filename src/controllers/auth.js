@@ -1,8 +1,8 @@
 import Boom from '@hapi/boom';
-import User from '../../models/User';
-import { ERROR_MESSAGES } from '../../utils/constants';
-import { secureUserParams } from '../../utils/security';
-import { asyncHandler } from '../../middlewares/asyncHandler';
+import User from '../models/User';
+import { ERROR_MESSAGES } from '../utils/constants';
+import { secureUserParams } from '../utils/security';
+import { asyncHandler } from '../middlewares/asyncHandler';
 
 export const signUp = asyncHandler(async (req, res, next) => {
     const { name, password, email } = req.body;
