@@ -24,7 +24,7 @@ export const postValue = asyncHandler(async (req, res, next) => {
             $push: { values: newValue },
         });
 
-        return res.status(200).json({ value: newValue });
+        return res.status(200).json(buildSuccessResponseBody({ value: newValue }));
     } catch (e) {
         return res.boom.internal(e.message);
     }
@@ -40,7 +40,7 @@ export const readValueById = asyncHandler(async (req, res) => {
         const sensorData = await SensorValue.findOne({ _id: valueId });
         if (!sensorData || sensorData.isDeleted) throw new Error('Sensor data not found');
 
-        return res.status(200).json({ value: sensorData });
+        return res.status(200).json(buildSuccessResponseBody({ value: sensorData }));
     } catch (e) {
         return res.boom.internal(e.message);
     }
@@ -61,7 +61,7 @@ export const readSensorAllValues = asyncHandler(async (req, res) => {
             if (!e.isDeleted) values.push(secureSensorDataParams(e));
         });
 
-        return res.status(200).json({ values })
+        return res.status(200).json(buildSuccessResponseBody({ values }));
     } catch (e) {
         return res.boom.internal(e.message);
     }
@@ -76,7 +76,7 @@ export const deleteSensorValueById = asyncHandler(async (req, res) => {
     try {
         await SensorValue.findByIdAndUpdate(valueId, { isDeleted: true })
 
-        return res.status(200).json({});
+        return res.status(200).json(buildSuccessResponseBody());
     }
     catch (e) {
         return res.boom.internal(e.message);

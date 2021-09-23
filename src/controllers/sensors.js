@@ -32,10 +32,10 @@ export const postNewSensor = asyncHandler(async (req, res, next) => {
 
         await User.findByIdAndUpdate(user._id, { $push: { sensors: sensor } });
         sensor.owner = secureUserParams(user);
-        return res.status(200).json({
+        return res.status(200).json(buildSuccessResponseBody({
             sensor: secureSensorParams(sensor),
             sensorToken: sensor.token,
-        });
+        }));
     } catch (e) {
         return res.boom.internal(e.message);
     }
@@ -51,7 +51,7 @@ export const readSensorById = asyncHandler(async (req, res, next) => {
         });
         if (!sensor) throw new Error('Sensor was not found in database');
 
-        return res.status(200).json({sensor: secureSensorParams(sensor)});
+        return res.status(200).json(buildSuccessResponseBody({sensor: secureSensorParams(sensor)}));
     } catch (e) {
         return res.boom.internal(e.message);
     }
@@ -67,7 +67,7 @@ export const deleteSensorById = asyncHandler(async (req, res, next) => {
         await Sensor.findByIdAndDelete(sensorId);
         await User.findByIdAndUpdate(user._id, { sensors: req.user.sensors.filter(v => v._id != sensorId) })
 
-        return res.status(200).json({});
+        return res.status(200).json(buildSuccessResponseBody());
     } catch (e) {
         return res.boom.internal(e.message);
     }

@@ -17,9 +17,9 @@ export const signUp = asyncHandler(async (req, res, next) => {
         const user = new User({ name, password, email });
         await user.save();
         const token = await user.generateAuthToken();
-        return res.status(200).json({ user: secureUserParams(user), token });
+        return res.status(200).json(buildSuccessResponseBody({ user: secureUserParams(user), token }));
     } catch (e) {
-        return next(res.json(Boom.badRequest(e.message).output.payload));
+        return res.boom.badData(e.message);
     }
 });
 
@@ -34,9 +34,9 @@ export const signIn = asyncHandler(async (req, res, next) => {
             return res.boom.unauthorized(ERROR_MESSAGES.invalidUserCredentials);
 
         const token = await user.generateAuthToken();
-        return res.status(200).json({ user: secureUserParams(user), token });
+        return res.status(200).json(buildSuccessResponseBody({ user: secureUserParams(user), token }));
     } catch (e) {
-        return res.boom.unauthorized(e);
+        return res.boom.unauthorized(e.message);
     }
 });
 
@@ -46,17 +46,17 @@ export const logout = asyncHandler(async (req, res, next) => {
             (token) => token.token !== req.token
         );
         await req.user.save();
-        return res.status(200).json({});
+        return res.status(200).json(buildSuccessResponseBody());
     } catch (error) {
-        return res.boom.internal(error);
+        return res.boom.internal(error.message);
     }
 });
 export const logoutAll = asyncHandler(async (req, res, next) => {
     try {
         req.user.tokens.splice(0, req.user.tokens.length);
         await req.user.save();
-        return res.status(200).json({});
+        return res.status(200).json(buildSuccessResponseBody());
     } catch (error) {
-        return res.boom.internal(error);
+        return res.boom.internal(error.message);
     }
 });
