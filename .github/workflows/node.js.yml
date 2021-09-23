@@ -47,7 +47,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ~/bb-api
@@ -55,4 +55,4 @@ jobs:
             docker rm $(docker ps -a -q)
             docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/bb-api
-            docker run --env-file ./.env -p 30:3000 -d ${{ secrets.DOCKER_HUB_USERNAME }}/bb-api
+            docker run --env-file ./.env -p 3000:30 -d ${{ secrets.DOCKER_HUB_USERNAME }}/bb-api
