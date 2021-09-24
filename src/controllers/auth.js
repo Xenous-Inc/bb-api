@@ -3,6 +3,7 @@ import User from '../models/User';
 import { ERROR_MESSAGES } from '../utils/constants';
 import { secureUserParams } from '../utils/security';
 import { asyncHandler } from '../middlewares/asyncHandler';
+import { buildSuccessResponseBody } from '../utils/objects';
 
 export const signUp = asyncHandler(async (req, res, next) => {
     const { name, password, email } = req.body;
@@ -17,7 +18,12 @@ export const signUp = asyncHandler(async (req, res, next) => {
         const user = new User({ name, password, email });
         await user.save();
         const token = await user.generateAuthToken();
-        return res.status(200).json(buildSuccessResponseBody({ user: secureUserParams(user), token }));
+        return res.status(200).json(
+            buildSuccessResponseBody({
+                user: secureUserParams(user),
+                token,
+            })
+        );
     } catch (e) {
         return res.boom.badData(e.message);
     }
@@ -34,7 +40,12 @@ export const signIn = asyncHandler(async (req, res, next) => {
             return res.boom.unauthorized(ERROR_MESSAGES.invalidUserCredentials);
 
         const token = await user.generateAuthToken();
-        return res.status(200).json(buildSuccessResponseBody({ user: secureUserParams(user), token }));
+        return res.status(200).json(
+            buildSuccessResponseBody({
+                user: secureUserParams(user),
+                token,
+            })
+        );
     } catch (e) {
         return res.boom.unauthorized(e.message);
     }

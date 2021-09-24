@@ -28,6 +28,6 @@ export const ERROR_MESSAGES = {
 };
 
 export const VALUE_TYPES = {
-    PM25: 'PM2,5',
+    PM25: 'PM2.5',
     PM10: 'PM10',
 };

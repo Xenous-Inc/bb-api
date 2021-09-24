@@ -1,4 +1,4 @@
-const buildSuccessResponseBody = (body) => {
+export const buildSuccessResponseBody = (body) => {
     if (!body) return {};
-    return { data: body, };
-}
+    return { data: body };
+};

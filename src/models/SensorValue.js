@@ -6,7 +6,7 @@ const sensorValueSchema = new Schema({
         type: String,
         enum: [VALUE_TYPES.PM25, VALUE_TYPES.PM10],
     },
-    value: { type: Number, required: true, },
+    value: { type: Number, required: true },
     sensor: {
         type: Schema.Types.ObjectId,
         ref: REFS.sensor,
