@@ -8,6 +8,7 @@ export const ERROR_MESSAGES = {
     notFound: 'There is nothing here!',
     // User
     invalidUserCredentials: 'Invalid email or password',
+    userIdNotFound: 'User ID not found in request body',
     userNameNotFound: 'Name not found in request body',
     userEmailNotFound: 'Email not found in request body',
     userPasswordNotFound: 'Password not found in request body',
@@ -19,7 +20,9 @@ export const ERROR_MESSAGES = {
     sensorFirmwareVersionNotFound:
         'Sensor firmware version not found in request body',
     sensorLocationNotFound: 'Sensor location not found in request body',
-    sensorIdNotFound: 'Sensor location not found in request params',
+    sensorIdNotFound: 'Sensor id not found in request params',
+    sensorSerialNumberNotFound:
+        'Sensor serial number not found in request params',
     // Sensor value
     sensorValueNotFound: 'Sensor Value type not found in request body',
     sensorValueTypeNotFound: 'Sensor Value type not found in request body',

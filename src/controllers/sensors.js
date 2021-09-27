@@ -17,11 +17,13 @@ export const linkNewSensorWithUser = asyncHandler(async (req, res, next) => {
     } = req.body;
     const user = req.user;
 
-    // if (!name) return res.boom.badData(ERROR_MESSAGES.sensorNameNotFound);
-    // if (!model) return res.boom.badData(ERROR_MESSAGES.sensorModelNotFound);
-    // if (!version) return res.boom.badData(ERROR_MESSAGES.sensorVersionNotFound);
-    // if (!firmwareVersion)
-    //     return res.boom.badData(ERROR_MESSAGES.sensorFirmwareVersionNotFound);
+    if (!name) return res.boom.badData(ERROR_MESSAGES.sensorNameNotFound);
+    if (!model) return res.boom.badData(ERROR_MESSAGES.sensorModelNotFound);
+    if (!version) return res.boom.badData(ERROR_MESSAGES.sensorVersionNotFound);
+    if (!firmwareVersion)
+        return res.boom.badData(ERROR_MESSAGES.sensorFirmwareVersionNotFound);
+    if (!serialNumber)
+        return res.boom.badData(ERROR_MESSAGES.sensorSerialNumberNotFound);
     if (!location)
         return res.boom.badData(ERROR_MESSAGES.sensorLocationNotFound);
 
@@ -33,6 +35,7 @@ export const linkNewSensorWithUser = asyncHandler(async (req, res, next) => {
             firmwareVersion,
             location,
             settings,
+            serialNumber,
             owner: user._id,
         });
         await sensor.save();
@@ -43,9 +46,35 @@ export const linkNewSensorWithUser = asyncHandler(async (req, res, next) => {
         return res.status(200).json(
             buildSuccessResponseBody({
                 sensor: secureSensorParams(sensor),
-                sensorToken: sensor.token,
             })
         );
+    } catch (e) {
+        return res.boom.internal(e.message);
+    }
+});
+
+export const approveBySensor = asyncHandler(async (req, res) => {
+    const { userId, serialNumber } = req.body;
+
+    if (!userId) return res.boom.badData(ERROR_MESSAGES.userIdNotFound);
+    if (!serialNumber)
+        return res.boom.badData(ERROR_MESSAGES.sensorSerialNumberNotFound);
+
+    try {
+        const sensor = await Sensor.findOneAndUpdate(
+            { owner: userId, serialNumber },
+            { approvedBySensor: true },
+            { new: true }
+        );
+        if (!sensor)
+            throw Error({
+                message:
+                    'Sensor with current userId and serialNumber not found',
+            });
+
+        return res
+            .status(200)
+            .json(buildSuccessResponseBody({ token: sensor.token }));
     } catch (e) {
         return res.boom.internal(e.message);
     }

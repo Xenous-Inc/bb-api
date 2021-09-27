@@ -23,6 +23,7 @@ const sensorSchema = new Schema({
     serialNumber: {
         type: String,
         required: true,
+        unique: true,
     },
     approvedBySensor: {
         type: Schema.Types.Boolean,
