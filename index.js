@@ -26,6 +26,9 @@ app.use('/sensor', sensorRouter);
 app.get('/ping', (req, res) => {
     return res.status(200).json('pong');
 });
+app.post('/post', (req, res) => {
+    return res.status(200).json(req.body);
+});
 
 app.use(notFound);
 
