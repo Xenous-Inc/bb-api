@@ -5,7 +5,7 @@ import SensorValue from '../models/SensorValue';
 import { secureSensorDataParams } from '../utils/security';
 import { buildSuccessResponseBody } from '../utils/objects';
 
-export const postValue = asyncHandler(async (req, res, next) => {
+export const postValue = asyncHandler(async (req, res) => {
     const sensor = req.sensor;
     const { type, value } = req.body;
 
@@ -30,6 +30,43 @@ export const postValue = asyncHandler(async (req, res, next) => {
             .status(200)
             .json(buildSuccessResponseBody({ value: newValue }));
     } catch (e) {
+        return res.boom.internal(e.message);
+    }
+});
+
+export const DEVpostValue = asyncHandler(async (req, res) => {
+    console.log('55');
+    const type = req.query.type;
+    const value = req.query.value;
+    const serialNumber = req.query.serialNumber;
+
+    if (!value) return res.boom.badData(ERROR_MESSAGES.sensorValueNotFound);
+    if (!type) return res.boom.badData(ERROR_MESSAGES.sensorValueTypeNotFound);
+    if (type !== VALUE_TYPES.PM25 && type !== VALUE_TYPES.PM10)
+        return res.boom.badData(ERROR_MESSAGES.sensorValueTypeIncorrect);
+
+    try {
+        const sensor = await Sensor.findOne({ serialNumber });
+        if (!sensor)
+            throw new Error({ message: 'No sensor with entered serialNumber' });
+        const newValue = await new SensorValue({
+            type,
+            value,
+            sensor: sensor._id,
+        }).save();
+
+        await Sensor.findByIdAndUpdate(sensor._id, {
+            $push: { values: newValue },
+            lastValue: newValue,
+        });
+
+        return res.status(200).json(
+            buildSuccessResponseBody({
+                value: secureSensorDataParams(newValue),
+            })
+        );
+    } catch (e) {
+        console.log(e);
         return res.boom.internal(e.message);
     }
 });

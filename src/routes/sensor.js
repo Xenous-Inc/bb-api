@@ -2,6 +2,7 @@ import express from 'express';
 import {
     approveBySensor,
     deleteSensorById,
+    DEVapproveBySensor,
     linkNewSensorWithUser,
     readAllSensors,
     readSensorById,
@@ -13,6 +14,9 @@ import sensorValueRouter from './sensor_value';
 const sensorRouter = express.Router();
 
 sensorRouter.post('/link', authUser, linkNewSensorWithUser);
+// DEV
+sensorRouter.get('/approve', DEVapproveBySensor);
+// DEV
 sensorRouter.post('/approve', approveBySensor);
 sensorRouter.get('/all', readAllSensors);
 sensorRouter.get('/:sensorId', readSensorById);

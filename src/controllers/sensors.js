@@ -133,3 +133,31 @@ export const readAllSensors = asyncHandler(async (req, res) => {
         return res.boom.internal(e.message);
     }
 });
+
+export const DEVapproveBySensor = asyncHandler(async (req, res) => {
+    const userId = req.query.userId;
+    const serialNumber = req.query.serialNumber;
+
+    if (!userId) return res.boom.badData(ERROR_MESSAGES.userIdNotFound);
+    if (!serialNumber)
+        return res.boom.badData(ERROR_MESSAGES.sensorSerialNumberNotFound);
+
+    try {
+        const sensor = await Sensor.findOneAndUpdate(
+            { owner: userId, serialNumber },
+            { approvedBySensor: true },
+            { new: true }
+        );
+        if (!sensor)
+            throw Error({
+                message:
+                    'Sensor with current userId and serialNumber not found',
+            });
+
+        return res
+            .status(200)
+            .json(buildSuccessResponseBody({ token: sensor.token }));
+    } catch (e) {
+        return res.boom.internal(e.message);
+    }
+});
