@@ -23,6 +23,7 @@ export const postValue = asyncHandler(async (req, res, next) => {
 
         await Sensor.findByIdAndUpdate(sensor._id, {
             $push: { values: newValue },
+            lastValue: newValue,
         });
 
         return res

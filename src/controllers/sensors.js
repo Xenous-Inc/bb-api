@@ -5,16 +5,23 @@ import { ERROR_MESSAGES, VALUE_TYPES } from '../utils/constants';
 import { secureSensorParams, secureUserParams } from '../utils/security';
 import { buildSuccessResponseBody } from '../utils/objects';
 
-export const postNewSensor = asyncHandler(async (req, res, next) => {
-    const { name, model, version, firmwareVersion, location, settings } =
-        req.body;
+export const linkNewSensorWithUser = asyncHandler(async (req, res, next) => {
+    const {
+        name,
+        model,
+        version,
+        firmwareVersion,
+        location,
+        settings,
+        serialNumber,
+    } = req.body;
     const user = req.user;
 
-    if (!name) return res.boom.badData(ERROR_MESSAGES.sensorNameNotFound);
-    if (!model) return res.boom.badData(ERROR_MESSAGES.sensorModelNotFound);
-    if (!version) return res.boom.badData(ERROR_MESSAGES.sensorVersionNotFound);
-    if (!firmwareVersion)
-        return res.boom.badData(ERROR_MESSAGES.sensorFirmwareVersionNotFound);
+    // if (!name) return res.boom.badData(ERROR_MESSAGES.sensorNameNotFound);
+    // if (!model) return res.boom.badData(ERROR_MESSAGES.sensorModelNotFound);
+    // if (!version) return res.boom.badData(ERROR_MESSAGES.sensorVersionNotFound);
+    // if (!firmwareVersion)
+    //     return res.boom.badData(ERROR_MESSAGES.sensorFirmwareVersionNotFound);
     if (!location)
         return res.boom.badData(ERROR_MESSAGES.sensorLocationNotFound);
 
@@ -77,6 +84,22 @@ export const deleteSensorById = asyncHandler(async (req, res, next) => {
         });
 
         return res.status(200).json(buildSuccessResponseBody());
+    } catch (e) {
+        return res.boom.internal(e.message);
+    }
+});
+
+// TODO: Remake with geo
+export const readAllSensors = asyncHandler(async (req, res) => {
+    try {
+        const sensorsCollection = await Sensor.find({});
+        let sensors = [];
+
+        sensorsCollection.forEach((v) => {
+            sensors = [...sensors, secureSensorParams(v)];
+        });
+
+        return res.status(200).json(buildSuccessResponseBody({ sensors }));
     } catch (e) {
         return res.boom.internal(e.message);
     }
