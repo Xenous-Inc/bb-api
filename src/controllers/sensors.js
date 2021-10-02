@@ -1,7 +1,7 @@
 import { asyncHandler } from '../middlewares/asyncHandler';
 import User from '../models/User';
 import Sensor from '../models/Sensor';
-import { ERROR_MESSAGES, VALUE_TYPES } from '../utils/constants';
+import { ERROR_MESSAGES } from '../utils/constants';
 import { secureSensorParams, secureUserParams } from '../utils/security';
 import { buildSuccessResponseBody } from '../utils/objects';
 
@@ -87,7 +87,7 @@ export const readSensorById = asyncHandler(async (req, res, next) => {
     try {
         const sensor = await Sensor.findOne({
             _id: sensorId,
-        });
+        }).populate('values lastValue', 'value type createdAt -_id');
         if (!sensor) throw new Error('Sensor was not found in database');
 
         return res
@@ -109,7 +109,7 @@ export const deleteSensorById = asyncHandler(async (req, res, next) => {
     try {
         await Sensor.findByIdAndDelete(sensorId);
         await User.findByIdAndUpdate(user._id, {
-            sensors: req.user.sensors.filter((v) => v._id != sensorId),
+            sensors: req.user.sensors.filter((v) => v._id !== sensorId),
         });
 
         return res.status(200).json(buildSuccessResponseBody());
@@ -121,7 +121,10 @@ export const deleteSensorById = asyncHandler(async (req, res, next) => {
 // TODO: Remake with geo
 export const readAllSensors = asyncHandler(async (req, res) => {
     try {
-        const sensorsCollection = await Sensor.find({});
+        const sensorsCollection = await Sensor.find({}).populate(
+            'values lastValue',
+            'value type createdAt -_id'
+        );
         let sensors = [];
 
         sensorsCollection.forEach((v) => {
