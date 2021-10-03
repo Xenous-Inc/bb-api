@@ -2,6 +2,7 @@ export const REFS = {
     user: 'User',
     sensor: 'Sensor',
     sensorValue: 'SensorValue',
+    authChallenge: 'AuthChallenge',
 };
 
 export const ERROR_MESSAGES = {
