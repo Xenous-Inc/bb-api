@@ -1,5 +1,6 @@
 export const secureUserParams = (user) => {
-    const { password, tokens, type, email, __v, ...userFields } = user.toObject();
+    const { password, tokens, type, email, __v, ...userFields } =
+        user.toObject();
     return userFields;
 };
 

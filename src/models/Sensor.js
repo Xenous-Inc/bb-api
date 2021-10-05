@@ -20,6 +20,15 @@ const sensorSchema = new Schema({
         type: String,
         required: true,
     },
+    serialNumber: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    approvedBySensor: {
+        type: Schema.Types.Boolean,
+        default: false,
+    },
     owner: {
         type: Schema.Types.ObjectId,
         ref: REFS.user,
@@ -44,6 +53,10 @@ const sensorSchema = new Schema({
         coordinates: {
             type: [Number],
         },
+    },
+    lastValue: {
+        type: Schema.Types.ObjectId,
+        ref: REFS.sensorValue,
     },
     values: [
         {
