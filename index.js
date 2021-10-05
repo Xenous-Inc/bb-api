@@ -21,7 +21,7 @@ app.use(
 app.use(boom());
 
 app.use('/user', userRouter);
-app.use('/user/auth', authRouter);
+app.use('/auth', authRouter);
 app.use('/sensor', sensorRouter);
 app.get('/ping', (req, res) => {
     return res.status(200).json('pong');

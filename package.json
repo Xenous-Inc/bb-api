@@ -33,7 +33,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.0",
     "mongoose": "^5.10.0",
-    "validator": "^13.1.1"
+    "node-fetch": "^2.6.5",
+    "validator": "^13.6.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.12",

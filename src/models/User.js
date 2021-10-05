@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import { ERROR_MESSAGES, REFS } from '../utils/constants';
-import {secureSensorParams} from "../utils/security";
+import { secureSensorParams } from '../utils/security';
 
 const { Schema } = mongoose;
 
@@ -18,6 +18,11 @@ const userSchema = new Schema({
         enum: ['user', 'admin'],
         default: 'user',
     },
+    phoneNumber: {
+        type: String,
+        trim: true,
+        unique: true,
+    },
     email: {
         type: String,
         required: true,
@@ -31,7 +36,7 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: false,
     },
     tokens: [
         {
@@ -75,17 +80,19 @@ userSchema.methods.generateAuthToken = async function () {
 };
 
 userSchema.statics.findOneByIdAndPopulateSensors = async (userId) => {
-   try {
-       if(!userId) throw new Error('userId=null');
+    try {
+        if (!userId) throw new Error('userId=null');
 
-       const user = await User.findOne({ _id: userId }).populate('sensors');
-       user.sensors.forEach((v, i) => user.sensors[i] = secureSensorParams(v));
+        const user = await User.findOne({ _id: userId }).populate('sensors');
+        user.sensors.forEach(
+            (v, i) => (user.sensors[i] = secureSensorParams(v))
+        );
 
-       return user;
-   } catch (e) {
+        return user;
+    } catch (e) {
         throw new Error(e);
-   }
-}
+    }
+};
 
 userSchema.statics.findByCredentials = async (email, password) => {
     try {

@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 import { REFS } from '../utils/constants';
 
 const authChallengeSchema = new Schema({
-    status: {
+    phoneStatus: {
         type: Boolean,
         required: true,
         default: false,
@@ -15,7 +15,6 @@ const authChallengeSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        required: true,
         default: null,
     },
     code: {
@@ -33,6 +32,11 @@ const authChallengeSchema = new Schema({
         required: true,
         default: '',
     },
+    confirmed: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
 });
 
 authChallengeSchema.set('timestamps', {
@@ -40,6 +44,6 @@ authChallengeSchema.set('timestamps', {
     updatedAt: true,
 });
 
-const AuthModel = model(REFS.authChallenge, authChallengeSchema);
+const AuthChallengeModel = model(REFS.authChallenge, authChallengeSchema);
 
-export default AuthModel;
+export default AuthChallengeModel;
