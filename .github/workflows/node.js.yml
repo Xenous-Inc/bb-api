@@ -51,8 +51,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ~/bb-api
-            docker stop $(docker ps -a -q)
-            docker rm $(docker ps -a -q)
+            docker stop bb-api
+            docker rm bb-api
             docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/bb-api
-            docker run --env-file ./.env -p 3000:30 -d ${{ secrets.DOCKER_HUB_USERNAME }}/bb-api
+            docker run --env-file ./.env -p 3000:30 -d --name "bb-api" ${{ secrets.DOCKER_HUB_USERNAME }}/bb-api
