@@ -47,18 +47,22 @@ export const DEVpostValue = asyncHandler(async (req, res) => {
 
     try {
         const sensor = await Sensor.findOne({ serialNumber });
+
         if (!sensor)
-            throw new Error({ message: 'No sensor with entered serialNumber' });
+            throw new Error({ message: 'No sensor with this serialNumber' });
         const newValue = await new SensorValue({
             type,
             value,
             sensor: sensor._id,
         }).save();
 
-        await Sensor.findByIdAndUpdate(sensor._id, {
-            $push: { values: newValue },
-            lastValue: newValue,
-        });
+        sensor.values.push(newValue);
+        if (newValue.type === VALUE_TYPES.PM10)
+            sensor.lastValue.pm10 = newValue._id;
+
+        if (newValue.type === VALUE_TYPES.PM25)
+            sensor.lastValue.pm25 = newValue._id;
+        await sensor.save();
 
         return res.status(200).json(
             buildSuccessResponseBody({

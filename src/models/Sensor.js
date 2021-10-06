@@ -55,8 +55,14 @@ const sensorSchema = new Schema({
         },
     },
     lastValue: {
-        type: Schema.Types.ObjectId,
-        ref: REFS.sensorValue,
+        pm25: {
+            type: Schema.Types.ObjectId,
+            ref: REFS.sensorValue,
+        },
+        pm10: {
+            type: Schema.Types.ObjectId,
+            ref: REFS.sensorValue,
+        },
     },
     values: [
         {
