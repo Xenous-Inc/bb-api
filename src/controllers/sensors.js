@@ -87,7 +87,10 @@ export const readSensorById = asyncHandler(async (req, res, next) => {
     try {
         const sensor = await Sensor.findOne({
             _id: sensorId,
-        }).populate('values lastValue', 'value type createdAt -_id');
+        }).populate(
+            'values lastValue.pm10 lastValue.pm25',
+            'value type createdAt -_id'
+        );
         if (!sensor) throw new Error('Sensor was not found in database');
 
         return res
@@ -122,7 +125,7 @@ export const deleteSensorById = asyncHandler(async (req, res, next) => {
 export const readAllSensors = asyncHandler(async (req, res) => {
     try {
         const sensorsCollection = await Sensor.find({}).populate(
-            'values lastValue',
+            'values lastValue.pm10 lastValue.pm25',
             'value type createdAt -_id'
         );
         let sensors = [];
