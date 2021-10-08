@@ -5,6 +5,7 @@ import { asyncHandler } from '../middlewares/asyncHandler';
 import AuthChallengeModel from '../models/AuthChallenge';
 import { sendPhoneVerify } from '../utils/phone';
 import validator from 'validator';
+import { buildSuccessResponseBody } from '../utils/objects';
 
 const phoneAuthChallenge = asyncHandler(async (req, res, next) => {
     const { phoneNumber } = req.body;
@@ -32,10 +33,12 @@ const phoneAuthChallenge = asyncHandler(async (req, res, next) => {
         authChallenge.phoneId = challenge.phone_id;
         await authChallenge.save();
 
-        return res.status(200).json({
-            challengeId: authChallenge._id,
-            additionalDataRequired: !user,
-        });
+        return res.status(200).json(
+            buildSuccessResponseBody({
+                challengeId: authChallenge._id,
+                additionalDataRequired: !user,
+            })
+        );
     } catch (e) {
         return next(res.json(Boom.badRequest(e.message).output.payload));
     }
@@ -64,7 +67,7 @@ const phoneAuth = asyncHandler(async (req, res, next) => {
         await challenge.save();
         const token = await user.generateAuthToken();
 
-        return res.status(200).json({ user: secureUserParams(user), token });
+        return res.status(200).json(buildSuccessResponseBody({ user: secureUserParams(user), token }));
     } catch (e) {
         return next(res.json(Boom.badRequest(e.message).output.payload));
     }
