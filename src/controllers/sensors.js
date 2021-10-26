@@ -49,6 +49,7 @@ export const linkNewSensorWithUser = asyncHandler(async (req, res, next) => {
             })
         );
     } catch (e) {
+        console.log(e);
         return res.boom.internal(e.message);
     }
 });
@@ -76,6 +77,7 @@ export const approveBySensor = asyncHandler(async (req, res) => {
             .status(200)
             .json(buildSuccessResponseBody({ token: sensor.token }));
     } catch (e) {
+        console.log(e);
         return res.boom.internal(e.message);
     }
 });
@@ -99,6 +101,7 @@ export const readSensorById = asyncHandler(async (req, res, next) => {
                 buildSuccessResponseBody({ sensor: secureSensorParams(sensor) })
             );
     } catch (e) {
+        console.log(e);
         return res.boom.internal(e.message);
     }
 });
@@ -117,6 +120,7 @@ export const deleteSensorById = asyncHandler(async (req, res, next) => {
 
         return res.status(200).json(buildSuccessResponseBody());
     } catch (e) {
+        console.log(e);
         return res.boom.internal(e.message);
     }
 });
@@ -136,6 +140,7 @@ export const readAllSensors = asyncHandler(async (req, res) => {
 
         return res.status(200).json(buildSuccessResponseBody({ sensors }));
     } catch (e) {
+        console.log(e);
         return res.boom.internal(e.message);
     }
 });
@@ -164,6 +169,7 @@ export const DEVapproveBySensor = asyncHandler(async (req, res) => {
             .status(200)
             .json(buildSuccessResponseBody({ token: sensor.token }));
     } catch (e) {
+        console.log(e);
         return res.boom.internal(e.message);
     }
 });

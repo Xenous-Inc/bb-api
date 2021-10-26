@@ -7,10 +7,13 @@ import notFound from './src/middlewares/notFound';
 import boom from 'express-boom';
 import userRouter from './src/routes/user';
 import sensorRouter from './src/routes/sensor';
+import promBundle from 'express-prom-bundle';
 
+const metricsMiddleware = promBundle({ includeMethod: true });
 const app = express();
 
 app.use(compression());
+// app.use(metricsMiddleware);
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(

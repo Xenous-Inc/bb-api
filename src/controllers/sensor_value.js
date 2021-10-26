@@ -30,6 +30,7 @@ export const postValue = asyncHandler(async (req, res) => {
             .status(200)
             .json(buildSuccessResponseBody({ value: newValue }));
     } catch (e) {
+        console.log(e);
         return res.boom.internal(e.message);
     }
 });
@@ -90,6 +91,7 @@ export const readValueById = asyncHandler(async (req, res) => {
             .status(200)
             .json(buildSuccessResponseBody({ value: sensorData }));
     } catch (e) {
+        console.log(e);
         return res.boom.internal(e.message);
     }
 });
@@ -110,6 +112,7 @@ export const readSensorAllValues = asyncHandler(async (req, res) => {
 
         return res.status(200).json(buildSuccessResponseBody({ values }));
     } catch (e) {
+        console.log(e);
         return res.boom.internal(e.message);
     }
 });
@@ -124,6 +127,7 @@ export const deleteSensorValueById = asyncHandler(async (req, res) => {
 
         return res.status(200).json(buildSuccessResponseBody());
     } catch (e) {
+        console.log(e);
         return res.boom.internal(e.message);
     }
 });
