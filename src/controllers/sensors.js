@@ -154,16 +154,14 @@ export const DEVapproveBySensor = asyncHandler(async (req, res) => {
         return res.boom.badData(ERROR_MESSAGES.sensorSerialNumberNotFound);
 
     try {
+        console.log(req.query);
         const sensor = await Sensor.findOneAndUpdate(
             { owner: userId, serialNumber },
             { approvedBySensor: true },
             { new: true }
         );
-        if (!sensor)
-            throw Error({
-                message:
-                    'Sensor with current userId and serialNumber not found',
-            });
+        console.log(sensor);
+        if (!sensor) return res.boom.internal('wrong sensor');
 
         return res
             .status(200)

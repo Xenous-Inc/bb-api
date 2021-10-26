@@ -26,7 +26,9 @@ app.use(boom());
 app.use('/user', userRouter);
 app.use('/auth', authRouter);
 app.use('/sensor', sensorRouter);
-app.get('/ping', (req, res) => {
+
+app.post('/ping', (req, res) => {
+    console.log(req.body.aue);
     return res.status(200).json('pong');
 });
 
