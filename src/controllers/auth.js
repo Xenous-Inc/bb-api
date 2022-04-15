@@ -40,6 +40,7 @@ const phoneAuthChallenge = asyncHandler(async (req, res, next) => {
             })
         );
     } catch (e) {
+        console.log("phoneAuth");
         return next(res.json(Boom.badRequest(e.message).output.payload));
     }
 });
