@@ -36,7 +36,6 @@ export const postValue = asyncHandler(async (req, res) => {
 });
 
 export const DEVpostValue = asyncHandler(async (req, res) => {
-    console.log('55');
     const type = req.query.type;
     const value = req.query.value;
     const serialNumber = req.query.serialNumber;

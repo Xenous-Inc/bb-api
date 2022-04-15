@@ -22,6 +22,7 @@ export const authUser = asyncHandler(async (req, res, next) => {
         req.token = token;
         next();
     } catch (error) {
+        console.log(error);
         return res.boom.unauthorized('Not access. Need authorized.');
     }
 });
@@ -42,6 +43,7 @@ export const authSensor = asyncHandler(async (req, res, next) => {
         req.token = token;
         next();
     } catch (e) {
+        console.log(error);
         return res.boom.unauthorized(
             'Not access. Sensor needs to be authorized'
         );
