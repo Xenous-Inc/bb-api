@@ -1,9 +1,9 @@
 import { asyncHandler } from '../middlewares/asyncHandler';
 import User from '../models/User';
-import Sensor from '../models/Sensor';
 import { ERROR_MESSAGES } from '../utils/constants';
 import { secureSensorParams, secureUserParams } from '../utils/security';
 import { buildSuccessResponseBody } from '../utils/objects';
+import Sensor from '../models/Sensor';
 
 export const linkNewSensorWithUser = asyncHandler(async (req, res, next) => {
     const {
@@ -156,10 +156,9 @@ export const DEVapproveBySensor = asyncHandler(async (req, res) => {
     try {
         console.log(req.query);
         const sensor = await Sensor.findOneAndUpdate(
-            { owner: userId, serialNumber },
-            { approvedBySensor: true },
-            { new: true }
-        );
+            { owner: userId, serialNumber: serialNumber },
+            { approvedBySensor: true }
+        ).exec();
         console.log(sensor);
         if (!sensor) return res.boom.internal('wrong sensor');
 
@@ -168,6 +167,6 @@ export const DEVapproveBySensor = asyncHandler(async (req, res) => {
             .json(buildSuccessResponseBody({ token: sensor.token }));
     } catch (e) {
         console.log(e);
-        return res.boom.internal(e.message);
+        return res.boom.internal(e.toString());
     }
 });
