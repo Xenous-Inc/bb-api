@@ -9,7 +9,6 @@ import userRouter from './src/routes/user';
 import sensorRouter from './src/routes/sensor';
 import promBundle from 'express-prom-bundle';
 
-const metricsMiddleware = promBundle({ includeMethod: true });
 const app = express();
 
 app.use(compression());
@@ -27,8 +26,7 @@ app.use('/user', userRouter);
 app.use('/auth', authRouter);
 app.use('/sensor', sensorRouter);
 
-app.post('/ping', (req, res) => {
-    console.log(req.body.aue);
+app.get('/ping', (req, res) => {
     return res.status(200).json('pong');
 });
 
