@@ -26,11 +26,11 @@ const phoneAuthChallenge = asyncHandler(async (req, res, next) => {
         });
 
         const challenge = await sendPhoneVerify(phoneNumber);
+        console.log(challenge);
 
         authChallenge.phoneStatus = challenge.status;
         authChallenge.id = challenge.ucaller_id;
         authChallenge.code = challenge.code;
-        authChallenge.phoneId = challenge.phone_id;
         await authChallenge.save();
 
         return res.status(200).json(

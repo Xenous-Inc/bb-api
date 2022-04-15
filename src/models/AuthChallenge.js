@@ -27,11 +27,6 @@ const authChallengeSchema = new Schema({
         required: true,
         default: '',
     },
-    phoneId: {
-        type: String,
-        required: true,
-        default: '',
-    },
     confirmed: {
         type: Boolean,
         required: true,
